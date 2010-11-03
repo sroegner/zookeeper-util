@@ -6,10 +6,8 @@ Dir.glob("#{localpath}/libs/*jar").each {|p| $CLASSPATH << p}
 
 module Zookeeper
 
-  Stat       = org.apache.zookeeper.data.Stat
-
-  def get_acl()
-  end
+  Stat              = org.apache.zookeeper.data.Stat
+  DEFAULT_SEPARATOR = "::"
 
   class Zookeeper
 
@@ -83,6 +81,19 @@ module Zookeeper
         puts "#$!"
       end
       return data
+    end
+
+    def dump(path, separator=DEFAULT_SEPARATOR)
+      @zk.get_children(path, false).each do |node|
+        next if path.eql?('/') && node.eql?('zookeeper')
+        stat = Stat.new
+        new_path = File.join(path, node)
+        d = @zk.get_data(new_path, false, stat) || ''.to_java_bytes
+        node_data = "#{String.from_java_bytes(d)}"
+        puts node_data.to_s.empty? ? "#{new_path}" : "#{new_path}#{separator}#{node_data}"
+
+        dump(new_path, separator) unless (stat.getNumChildren == 0)
+      end
     end
 
     def purge(path)

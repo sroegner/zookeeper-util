@@ -7,14 +7,15 @@ include Zookeeper
 options = {}
 
 optparse = OptionParser.new do|opts|
-   opts.banner = "Usage: #{File.basename(__FILE__)} [options] <host:port>"
+  f = File.basename(__FILE__)
+  opts.banner = "Usage: #{f} [options] -c <host:port> -p /some/path -n somedata\n       or\n       #{f} -c <host:port> -f </some/file/name>\n"
 
-   options[:verbose] = false
-   options[:connect_string] = "localhost:2181"
+   options[:verbose]          = false
+   options[:connect_string]   = ""
    options[:column_separator] = "::"
-   options[:data] = ""
-   options[:filename] = ""
-   options[:delete] = false
+   options[:data]             = ""
+   options[:filename]         = ""
+   options[:delete]           = false
 
    opts.on( '-c', '--connectstring host:port', String, "defaults to #{options[:connect_string]}"){|x| options[:connect_string] = x}
    opts.on( '-s', '--separator sep', String, 'separator /path[::]data' ){|cs| options[:column_separator] = cs}
@@ -24,26 +25,27 @@ optparse = OptionParser.new do|opts|
    opts.on( '-f', '--file FILE', 'the import file to read from' ){|f| options[:filename] = f}
    opts.on( '-v', '--verbose', 'Output more information' ){options[:verbose] = true}
    opts.on( '-h', '--help', 'Display this screen' ){puts opts; exit}
- end
+
+   if(ARGV.size == 0)
+     puts opts
+     exit
+   end
+  
+end
+
 optparse.parse!
+puts options.inspect if options[:verbose]
 
 connect_string = options[:connect_string]
 colsep         = options[:column_separator]
+path           = options[:path]
+data           = options[:data]
+zk             = Zookeeper::Zookeeper.new
 
-
-zk = Zookeeper::Zookeeper.new
 zk.connect(connect_string)
 
-
-puts options.inspect if options[:verbose]
-
-stat = Stat.new
-path = "#{options[:path]}"
-data = "#{options[:data]}".to_java_bytes
-
-
 if options[:filename].empty?
-  # Cannot do anything useful without a path
+  # Cannot do anything useful without a path then
   if path.empty?
     puts opts
     exit

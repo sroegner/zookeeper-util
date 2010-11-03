@@ -6,18 +6,22 @@ include Zookeeper
 
 options = {}
 optparse = OptionParser.new do|opts|
-   opts.banner = "Usage: #{File.basename(__FILE__)} [options] <host:port>"
+   opts.banner = "Usage: #{File.basename(__FILE__)} [options] -c <host:port>"
 
-   options[:verbose] = false
-   options[:connect_string] = "localhost:2181"
-
-   options[:path] = "/"
-   options[:delete] = false
+   options[:verbose]        = false
+   options[:connect_string] = ""
+   options[:path]           = "/"
 
    opts.on( '-c', '--connectstring host:port', String, "defaults to #{options[:connect_string]}"){|x| options[:connect_string] = x}
    opts.on( '-p', '--path path', String, "path to purge"){|sp| options[:path] = sp}
    opts.on( '-v', '--verbose', 'Output more information' ){options[:verbose] = true}
    opts.on( '-h', '--help', 'Display this screen' ){puts opts; exit}
+
+   if(ARGV.size == 0)
+     puts opts
+     exit
+   end
+
  end
 optparse.parse!
 
