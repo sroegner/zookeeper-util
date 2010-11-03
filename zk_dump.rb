@@ -33,7 +33,7 @@ puts "# Start path will be #{options[:start_path]}" if options[:verbose]
 
 ZooKeeper = org.apache.zookeeper.ZooKeeper
 Stat      = org.apache.zookeeper.data.Stat
-@zk = ZooKeeper.new(connect_string, 10000, Proc.new { puts "# main watcher" if options[:verbose] })
+@zk = ZooKeeper.new(connect_string, 10000, Proc.new { puts "# Connect Watcher" if options[:verbose] })
 
 def zk_traverse(path)
   @zk.get_children(path, false).each do |node|
@@ -42,7 +42,7 @@ def zk_traverse(path)
     new_path = "#{path}/#{node}".sub(/\/\//, '/')
     d = @zk.get_data(new_path, false, stat) || ''.to_java_bytes
     node_data = "#{String.from_java_bytes(d)}"
-    puts node_data.to_s.empty? ? "#{new_path}" : "#{new_path}#{@colsep}'#{node_data}'"    
+    puts node_data.to_s.empty? ? "#{new_path}" : "#{new_path}#{@colsep}#{node_data}"    
 
     zk_traverse(new_path) unless (stat.getNumChildren == 0)
   end

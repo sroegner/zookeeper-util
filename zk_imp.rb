@@ -1,30 +1,76 @@
 require 'java'
+require 'optparse'
+require 'zookeeper'
 
-# Add all jars in the local path to the programs CLASSPATH
-localpath = File.expand_path(File.dirname(__FILE__))
-Dir.glob("#{localpath}/libs/*jar").each {|p| $CLASSPATH << p}
+include Zookeeper
+
+options = {}
+
+optparse = OptionParser.new do|opts|
+   opts.banner = "Usage: #{File.basename(__FILE__)} [options] <host:port>"
+
+   options[:verbose] = false
+   options[:connect_string] = "localhost:2181"
+   options[:column_separator] = "::"
+   options[:data] = ""
+   options[:filename] = ""
+   options[:delete] = false
+
+   opts.on( '-c', '--connectstring host:port', String, "defaults to #{options[:connect_string]}"){|x| options[:connect_string] = x}
+   opts.on( '-s', '--separator sep', String, 'separator /path[::]data' ){|cs| options[:column_separator] = cs}
+   opts.on( '-p', '--path path', String, "path to create or delete"){|sp| options[:path] = sp}
+   opts.on( '-n', '--node_data <data>', String, "data to add to the node, if creating"){|sp| options[:data] = sp}
+   opts.on( '-d', '--delete', 'Output more information' ){options[:delete] = true}
+   opts.on( '-f', '--file FILE', 'the import file to read from' ){|f| options[:filename] = f}
+   opts.on( '-v', '--verbose', 'Output more information' ){options[:verbose] = true}
+   opts.on( '-h', '--help', 'Display this screen' ){puts opts; exit}
+ end
+optparse.parse!
+
+connect_string = options[:connect_string]
+colsep         = options[:column_separator]
 
 
-host = "192.168.1.34"
-port = "2181"
-connect_string = "#{host}:#{port}"
-SEPARATOR="::"
+zk = Zookeeper::Zookeeper.new
+zk.connect(connect_string)
 
-ZooKeeper = org.apache.zookeeper.ZooKeeper
-Stat      = org.apache.zookeeper.data.Stat
-@zk = ZooKeeper.new(connect_string, 10000, Proc.new { puts "# main watcher" })
 
-def zk_traverse(path)
-  @zk.get_children(path, false).each do |node|
-    next if node.eql?('zookeeper')
-    stat = Stat.new
-    new_path = "#{path}/#{node}".sub(/\/\//, '/')
-    d = @zk.get_data(new_path, false, stat) || ''.to_java_bytes
-    node_data = "#{String.from_java_bytes(d)}"
-    puts node_data.to_s.empty? ? "#{new_path}" : "#{new_path}#{SEPARATOR}'#{node_data}'"    
+puts options.inspect if options[:verbose]
 
-    zk_traverse(new_path) unless (stat.getNumChildren == 0)
+stat = Stat.new
+path = "#{options[:path]}"
+data = "#{options[:data]}".to_java_bytes
+
+
+if options[:filename].empty?
+  # Cannot do anything useful without a path
+  if path.empty?
+    puts opts
+    exit
+  end
+
+  if options[:delete]
+    puts "# Deleting Path #{path}" if options[:verbose]
+    zk.delete(path)
+  else
+    puts "# Writing data '#{options[:data]}' to Path #{path}" if options[:verbose]
+    zk.set_data(path, data)
+  end
+else
+  File.new(options[:filename]).each_line do |line|
+    next if line =~ /^\s*\#/
+    next if line.empty?
+
+    line.chomp!
+    a = line.split(colsep)
+    if(a.size == 1)
+      puts "# Creating path #{a[0]}" if options[:verbose]
+      zk.create_path(a[0].chomp)
+    elsif(a.size == 2)
+      puts "# Writing data '#{a[1]}' to Path #{a[0]}" if options[:verbose]
+      zk.set_data(a[0].chomp, a[1].chomp)
+    else
+      puts "#{line} is broken"
+    end
   end
 end
-
-zk_traverse('/')

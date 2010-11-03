@@ -7,9 +7,9 @@ JAVA_BIN="${JAVA_HOME}/bin/java"
 
 cd $(dirname ${0})
 DIST_DIR=$PWD
-cd - > /dev/null
+cd - >/dev/null
 
 JRUBY_DIST="${DIST_DIR}/libs/jruby-dist/jruby-complete-1.5.3.jar"
 
-${JAVA_BIN} -jar ${JRUBY_DIST} ${DIST_DIR}/zk_dump.rb $* 2>/dev/null
+${JAVA_BIN} -jar ${JRUBY_DIST} ${DIST_DIR}/zk_imp.rb $* 2> /dev/null
 
