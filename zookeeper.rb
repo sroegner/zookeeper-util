@@ -16,8 +16,8 @@ module Zookeeper
         @zk = org.apache.zookeeper.ZooKeeper.new(connect_string,
                                                          timeout,
                                                          Proc.new{nil})
-      rescue Exception
-        puts "#{$!}"
+      rescue Exception => e
+        puts "#{e.cause}"
       end
     end
 
@@ -111,7 +111,6 @@ module Zookeeper
           stat = Stat.new
 
           new_path = File.join(path, node)
-          puts "Stat for '#{new_path}'"
           stat = @zk.exists(new_path, false)
           next if stat.nil?
 
