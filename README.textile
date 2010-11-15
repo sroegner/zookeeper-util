@@ -1,0 +1,6 @@
+The Zookeeper Toolbox
+
+Planned so far:
+ - Export tool (dump out a full or partial tree)
+ - Import (from a file)
+
