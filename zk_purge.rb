@@ -13,7 +13,7 @@ optparse = OptionParser.new do|opts|
    options[:path]           = "/"
 
    opts.on( '-c', '--connectstring host:port', String, "defaults to #{options[:connect_string]}"){|x| options[:connect_string] = x}
-   opts.on( '-p', '--path path', String, "path to purge"){|sp| options[:path] = sp}
+   opts.on( '-p', '--path path', String, "path to purge, defaults to '/'"){|sp| options[:path] = sp}
    opts.on( '-v', '--verbose', 'Output more information' ){options[:verbose] = true}
    opts.on( '-h', '--help', 'Display this screen' ){puts opts; exit}
 
