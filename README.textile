@@ -8,7 +8,6 @@ All operations implicitly exclude the /zookeeper path. Please try not to use wit
 * *import* (write) a full (or partial) export off of another zk instance
 * *purge* (delete) all data from a running zk instance
 
-Find the zk_toolbox folder in the root home directory of the virtual machine image - there is a source mirror at [svn://harley/main/tools/zk_toolbox/trunk]
 There is only one executable (*zk_tools.sh*) that understands the three commands specified above with the following options:
 
 {code}Usage: zk_tools.sh <dump|import|purge> -c host:port [options]{code}
