@@ -10,7 +10,7 @@ All operations implicitly exclude the /zookeeper path. Please try not to use wit
 
 There is only one executable (*zk_tools.sh*) that understands the three commands specified above with the following options:
 
-{code}Usage: zk_tools.sh <dump|import|purge> -c host:port [options]{code}
+bc. Usage: zk_tools.sh <dump|import|purge> -c host:port [options]
 
 h5. dump
 
