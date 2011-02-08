@@ -1,6 +1,6 @@
-The Zookeeper Toolbox
+The Zookeeper Utilities
 
-p. The zookeeper toolbox is a minimalistic approach to automating the main administrative tasks with zookeeper (_zk_) test instances.
+p. The zookeeper utilities are meant to help automating some administrative tasks with zookeeper test instances.
 All operations implicitly exclude the /zookeeper path. Please try not to use with production instances.
 
 * *export* (read) data from a running zk instance into a file
@@ -8,13 +8,13 @@ All operations implicitly exclude the /zookeeper path. Please try not to use wit
 * *import* (write) a full (or partial) export off of another zk instance
 * *purge* (delete) all data from a running zk instance
 
-There is only one executable (*zk_tools.sh*) that understands the three commands specified above with the following options:
+There is only one executable (*zkutil*) that understands the three commands specified above with the following options:
 
-bc. Usage: zk_tools.sh <dump|import|purge> -c host:port [options]
+bc. Usage: zkutil <dump|import|purge> -c host:port [options]
 
 h5. dump
 
-bc. ./zk_tools.sh dump -h
+bc. zkutil dump -h
 Usage: zk_dump.rb [options] -c <host:port>
     -c, --connectstring host:port    the server to connect to
     -s, --separator sep              separator /path[::]data
@@ -36,7 +36,7 @@ h5. import
 
 Can either import from a file or take alternatively path + data as parameters
 
-bc. ./zk_tools.sh import -h
+bc. zkutil import -h
 Usage: zk_import.rb [options] -c <host:port> -p /some/path -n somedata
        or
        zk_import.rb -c <host:port> -f </some/file/name>
@@ -53,7 +53,7 @@ h5. purge
 
 Delete all data from the path.
 
-bc. ./zk_tools.sh purge -h
+bc. zkutil purge -h
 Usage: zk_purge.rb [options] -c <host:port>
     -c, --connectstring host:port    defaults to 
     -p, --path path                  path to purge, defaults to '/'

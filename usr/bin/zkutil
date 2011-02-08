@@ -1,0 +1,22 @@
+#!/bin/bash
+
+JAVA_HOME=${JAVA_HOME:-"/usr/java/latest"}
+JAVA_BIN="${JAVA_HOME}/bin/java"
+DIST_DIR=/usr/share/zookeeper-util
+LIB_DIR=/usr/share/java/zookeeper-util
+JRUBY_DIST="$(ls -1tr ${LIB_DIR}/jruby-complete-*jar 2>/dev/null| tail -1)"
+
+[ ! -x ${JAVA_BIN} ] && echo "Cannot find the java executable in JAVA_HOME: $JAVA_HOME" && exit 128
+[ -z "${JRUBY_DIST}" -o ! -f "${JRUBY_DIST}" ] && echo "Cannot find the jruby distribution in $LIB_DIR" && exit 64
+
+usage()
+{
+  echo "Usage: $(basename $0) <dump|import|purge> -c host:port [options]" && exit 32
+}
+
+[ -z "$1" ] && usage
+cmd="${1}"
+
+[ $cmd = "dump" -o $cmd = "import" -o $cmd = "purge" ] || usage
+${JAVA_BIN} -jar ${JRUBY_DIST} ${DIST_DIR}/bin/zk_${cmd}.rb $* 
+
