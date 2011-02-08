@@ -26,15 +26,10 @@ p. Will print a text representation to STDOUT (which you can redirect into a dum
 
 pre. /
 /conf
-/conf/ordersvc
-/conf/ordersvc/00::jdbc:oracle:thin:@sbabovich:1521:sb2
-/conf/ordersvc/00/scribeServer::10.200.24.140:1463
-/conf/ordersvc/00/searchService::searchsvc/00
-...
-/conf/kvsserver
-/conf/kvsserver/00
-/conf/kvsserver/00/rmi-service::ReplicatedKVS
-/conf/kvsserver/00/scribe::scribe/00
+/conf/entries
+/conf/entries/00
+/conf/entries/00/host1::192.168.1.211
+/conf/entries/00/host2::192.168.1.213
 ...
 
 h5. import
