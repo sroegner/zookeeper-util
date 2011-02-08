@@ -1,6 +1,7 @@
+localpath = File.expand_path(File.dirname(__FILE__))
 require 'java'
 require 'optparse'
-require 'zookeeper'
+require File.join(localpath, 'zookeeper.rb')
 
 include Zookeeper
 

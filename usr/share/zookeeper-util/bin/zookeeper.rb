@@ -1,8 +1,6 @@
 require 'java'
 
-# Add all jars in the local path to the programs CLASSPATH
-localpath = File.expand_path(File.dirname(__FILE__))
-Dir.glob("#{localpath}/libs/*jar").each {|p| $CLASSPATH << p}
+Dir.glob("/usr/share/java/zookeeper-util/*jar").each {|p| $CLASSPATH << p}
 
 module Zookeeper
 

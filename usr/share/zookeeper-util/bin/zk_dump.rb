@@ -1,12 +1,9 @@
+localpath = File.expand_path(File.dirname(__FILE__))
 require 'java'
 require 'optparse'
-require 'zookeeper'
+require File.join(localpath, 'zookeeper.rb')
 
 include Zookeeper
-
-# Add all jars in the local path to the programs CLASSPATH
-localpath = File.expand_path(File.dirname(__FILE__))
-Dir.glob("#{localpath}/libs/*jar").each {|p| $CLASSPATH << p}
 
 options = {}
 

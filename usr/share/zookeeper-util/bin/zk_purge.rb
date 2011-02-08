@@ -1,10 +1,12 @@
+localpath = File.expand_path(File.dirname(__FILE__))
 require 'java'
 require 'optparse'
-require 'zookeeper'
+require File.join(localpath, 'zookeeper.rb')
 
 include Zookeeper
 
 options = {}
+
 optparse = OptionParser.new do|opts|
    opts.banner = "Usage: #{File.basename(__FILE__)} [options] -c <host:port>"
 

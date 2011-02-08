@@ -14,12 +14,12 @@ v = YAML.load_file('VERSION.yml')
 namespace :release do
   desc "Create a zip archive"
   task :zip do
-    sh "git archive --format=zip --prefix=#{@project_name}/ HEAD > #{@project_name}-#{@version_string}.zip"
+    sh "git archive --format=zip --prefix=#{@project_name}-#{@version_string}/ HEAD > #{@project_name}-#{@version_string}.zip"
   end
 
   desc "Create a tarball archive"
   task :tarball do
-    sh "git archive --format=tar --prefix=#{@project_name }/ HEAD | gzip > #{@project_name}-#{@version_string}.tar.gz"
+    sh "git archive --format=tar --prefix=#{@project_name}-#{@version_string}/ HEAD | gzip > #{@project_name}-#{@version_string}.tar.gz"
   end
 end
 
