@@ -1,6 +1,68 @@
 The Zookeeper Toolbox
 
-Planned so far:
- - Export tool (dump out a full or partial tree)
- - Import (from a file)
+p. The zookeeper toolbox is a minimalistic approach to automating the main administrative tasks with zookeeper (_zk_) test instances.
+All operations implicitly exclude the /zookeeper path. Please try not to use with production instances.
+
+* *export* (read) data from a running zk instance into a file
+** keep the data editable
+* *import* (write) a full (or partial) export off of another zk instance
+* *purge* (delete) all data from a running zk instance
+
+Find the zk_toolbox folder in the root home directory of the virtual machine image - there is a source mirror at [svn://harley/main/tools/zk_toolbox/trunk]
+There is only one executable (*zk_tools.sh*) that understands the three commands specified above with the following options:
+
+{code}Usage: zk_tools.sh <dump|import|purge> -c host:port [options]{code}
+
+h5. dump
+
+bc. ./zk_tools.sh dump -h
+Usage: zk_dump.rb [options] -c <host:port>
+    -c, --connectstring host:port    the server to connect to
+    -s, --separator sep              separator /path[::]data
+    -p, --start_path path            path to dump, defaults to '/'
+    -v, --verbose                    Output more information
+    -h, --help                       Display this screen
+
+p. Will print a text representation to STDOUT (which you can redirect into a dump file) looking like this:
+
+pre. /
+/conf
+/conf/ordersvc
+/conf/ordersvc/00::jdbc:oracle:thin:@sbabovich:1521:sb2
+/conf/ordersvc/00/scribeServer::10.200.24.140:1463
+/conf/ordersvc/00/searchService::searchsvc/00
+...
+/conf/kvsserver
+/conf/kvsserver/00
+/conf/kvsserver/00/rmi-service::ReplicatedKVS
+/conf/kvsserver/00/scribe::scribe/00
+...
+
+h5. import
+
+Can either import from a file or take alternatively path + data as parameters
+
+bc. ./zk_tools.sh import -h
+Usage: zk_import.rb [options] -c <host:port> -p /some/path -n somedata
+       or
+       zk_import.rb -c <host:port> -f </some/file/name>
+    -c, --connectstring host:port    defaults to 
+    -s, --separator sep              separator /path[::]data
+    -p, --path path                  path to create or delete
+    -n, --node_data <data>           data to add to the node, if creating
+    -d, --delete                     Output more information
+    -f, --file FILE                  the import file to read from
+    -v, --verbose                    Output more information
+    -h, --help                       Display this screen
+
+h5. purge
+
+Delete all data from the path.
+
+bc. ./zk_tools.sh purge -h
+Usage: zk_purge.rb [options] -c <host:port>
+    -c, --connectstring host:port    defaults to 
+    -p, --path path                  path to purge, defaults to '/'
+    -v, --verbose                    Output more information
+    -h, --help                       Display this screen
 
