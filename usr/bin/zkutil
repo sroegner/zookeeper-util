@@ -2,12 +2,15 @@
 
 JAVA_HOME=${JAVA_HOME:-"/usr/java/latest"}
 JAVA_BIN="${JAVA_HOME}/bin/java"
-DIST_DIR=/usr/share/zookeeper-util
-LIB_DIR=/usr/share/java/zookeeper-util
+cd $(dirname $0)
+BIN_DIR=$(pwd)
+TOP_DIR=$(dirname $BIN_DIR)
+DIST_DIR=$TOP/share/zookeeper-util
+LIB_DIR=$TOP_DIR/share/java/zookeeper-util
 JRUBY_DIST="$(ls -1tr ${LIB_DIR}/jruby-complete-*jar 2>/dev/null| tail -1)"
 
 [ ! -x ${JAVA_BIN} ] && echo "Cannot find the java executable in JAVA_HOME: $JAVA_HOME" && exit 128
-[ -z "${JRUBY_DIST}" -o ! -f "${JRUBY_DIST}" ] && echo "Cannot find the jruby distribution in $LIB_DIR" && exit 64
+[ -z "${JRUBY_DIST}" -o ! -f "${JRUBY_DIST}" ] && echo "Cannot find the jruby distribution in $LIB_DIR - please download from jruby.org" && exit 64
 
 usage()
 {
