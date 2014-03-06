@@ -1,6 +1,7 @@
 require 'java'
 
-Dir.glob("/usr/share/java/zookeeper-util/*jar").each {|p| $CLASSPATH << p}
+share_dir = File.dirname(File.dirname(File.dirname(__FILE__)))
+Dir.glob(File.join(share_dir, "java/zookeeper-util/*jar")).each {|p| $CLASSPATH << p}
 
 module Zookeeper
 
