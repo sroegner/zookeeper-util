@@ -5,7 +5,7 @@ JAVA_BIN="${JAVA_HOME}/bin/java"
 cd $(dirname $0)
 BIN_DIR=$(pwd)
 TOP_DIR=$(dirname $BIN_DIR)
-DIST_DIR=$TOP/share/zookeeper-util
+DIST_DIR=$TOP_DIR/share/zookeeper-util
 LIB_DIR=$TOP_DIR/share/java/zookeeper-util
 JRUBY_DIST="$(ls -1tr ${LIB_DIR}/jruby-complete-*jar 2>/dev/null| tail -1)"
 
