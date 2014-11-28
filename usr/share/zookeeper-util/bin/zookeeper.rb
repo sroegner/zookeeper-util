@@ -10,6 +10,12 @@ module Zookeeper
 
   class Zookeeper
 
+    attr_accessor :verbose
+
+    def initialize
+      @verbose = false
+    end
+
     def connect(connect_string, timeout=1000)
       begin
         @zk = org.apache.zookeeper.ZooKeeper.new(connect_string,
@@ -100,6 +106,34 @@ module Zookeeper
       purge_path(@purge_path_top)
     end
 
+    def clone(source, path)
+      puts "Cloning \"" + path + "\"" if @verbose
+      source.connection.get_children(path, false).each do |node|
+        next if path.eql?('/') && node.eql?('zookeeper')
+        create_path_recursively(path) if !path_exists?(path)
+
+        begin
+          stat = Stat.new
+          bytes = source.connection.get_data(path, false, stat)
+          @zk.set_data(path, bytes, -1)
+        rescue
+          puts "#$!"
+        end
+
+        if (path.eql?('/'))
+          clone(source, '/' + node)
+        else
+          clone(source, path + '/' + node)
+        end
+
+      end
+    end
+
+    protected
+
+      def connection()
+        return @zk
+      end
 
     private
 

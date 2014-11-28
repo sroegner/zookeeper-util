@@ -36,7 +36,7 @@ start_path     = options[:start_path]
 
 puts "# Using connect string #{connect_string}" if options[:verbose]
 puts "# Column separator will be #{colsep}" if options[:verbose]
-puts "# Start path will be " if options[:verbose]
+puts "# Start path will be #{start_path}" if options[:verbose]
 
 zk = Zookeeper::Zookeeper.new
 zk.connect(connect_string)

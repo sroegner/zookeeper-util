@@ -14,12 +14,12 @@ JRUBY_DIST="$(ls -1tr ${LIB_DIR}/jruby-complete-*jar 2>/dev/null| tail -1)"
 
 usage()
 {
-  echo "Usage: $(basename $0) <dump|import|purge> -c host:port [options]" && exit 32
+  echo "Usage: $(basename $0) <dump|import|purge|clone> [options]" && exit 32
 }
 
 [ -z "$1" ] && usage
 cmd="${1}"
 
-[ $cmd = "dump" -o $cmd = "import" -o $cmd = "purge" ] || usage
+[ $cmd = "dump" -o $cmd = "import" -o $cmd = "purge" -o $cmd = "clone" ] || usage
 ${JAVA_BIN} -jar ${JRUBY_DIST} ${DIST_DIR}/bin/zk_${cmd}.rb $* 
 
