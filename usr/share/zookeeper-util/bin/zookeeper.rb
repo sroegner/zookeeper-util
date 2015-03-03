@@ -1,4 +1,5 @@
 require 'java'
+require 'json'
 
 share_dir = File.dirname(File.dirname(File.dirname(__FILE__)))
 Dir.glob(File.join(share_dir, "java/zookeeper-util/*jar")).each {|p| $CLASSPATH << p}
@@ -88,7 +89,7 @@ module Zookeeper
         stat = Stat.new
         new_path = File.join(path, node)
         d = @zk.get_data(new_path, false, stat) || ''.to_java_bytes
-        node_data = "#{String.from_java_bytes(d)}"
+        node_data = "#{String.from_java_bytes(d)}".force_encoding("ISO-8859-1").encode("UTF-8").to_json
         puts node_data.to_s.empty? ? "#{new_path}" : "#{new_path}#{separator}#{node_data}"
 
         dump(new_path, separator) unless (stat.getNumChildren == 0)
