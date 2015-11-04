@@ -60,3 +60,31 @@ Usage: zk_purge.rb [options] -c <host:port>
     -v, --verbose                    Output more information
     -h, --help                       Display this screen
 
+h5. Docker
+
+A Dockerfile is added to easy package and use this tool. You can checkout this repo and build a docker image like this:
+
+bc. $ docker build -t gengmao/zookeeper-util .
+Sending build context to Docker daemon 17.85 MB
+Step 0 : FROM java:openjdk-8
+ ---> c1ccce98b537
+Step 1 : COPY usr /usr
+ ---> Using cache
+ ---> ce7c545aa779
+Step 2 : ADD https://s3.amazonaws.com/jruby.org/downloads/1.7.22/jruby-complete-1.7.22.jar /usr/share/java/zookeeper-util/
+Downloading [==================================================>] 23.72 MB/23.72 MB
+ ---> Using cache
+ ---> c2e854f67dc7
+Step 3 : ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
+ ---> Using cache
+ ---> 0e4583859950
+Step 4 : ENTRYPOINT /usr/bin/zkutil
+ ---> Using cache
+ ---> da8f8a8c682d
+Successfully built da8f8a8c682d
+
+Then you can use the image like this:
+
+bc. $ docker run -it gengmao/zookeeper-util
+Usage: zkutil <dump|import|purge> -c host:port [options]
+

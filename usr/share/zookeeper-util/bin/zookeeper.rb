@@ -87,10 +87,13 @@ module Zookeeper
         next if path.eql?('/') && node.eql?('zookeeper')
         stat = Stat.new
         new_path = File.join(path, node)
-        d = @zk.get_data(new_path, false, stat) || ''.to_java_bytes
-        node_data = "#{String.from_java_bytes(d)}"
-        puts node_data.to_s.empty? ? "#{new_path}" : "#{new_path}#{separator}#{node_data}"
-
+        d = @zk.get_data(new_path, false, stat)
+        if d == nil or d.length == 0
+          puts "#{new_path}"
+        else
+          node_data = "#{javax.xml.bind.DatatypeConverter.printBase64Binary(d)}"
+          puts "#{new_path}#{separator}#{node_data}"
+        end
         dump(new_path, separator) unless (stat.getNumChildren == 0)
       end
     end

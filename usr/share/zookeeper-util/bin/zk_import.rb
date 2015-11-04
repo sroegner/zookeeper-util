@@ -71,7 +71,7 @@ else
       zk.create_path(a[0].chomp)
     elsif(a.size == 2)
       puts "# Writing data '#{a[1]}' to Path #{a[0]}" if options[:verbose]
-      zk.set_data(a[0].chomp, a[1].chomp)
+      zk.set_data(a[0].chomp, javax.xml.bind.DatatypeConverter.parseBase64Binary(a[1]))
     else
       puts "#{line} is broken"
     end
